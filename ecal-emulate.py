@@ -34,4 +34,11 @@ class ECalDevice(USBDevice):
                 def handle_data_received(self, data):
                     print(f"Received data: {data}")
 
+    @vendor_request_handler(number=4, direction=USBDirection.OUT)
+    @to_device
+    def handle_control_request_4(self, request):
+        print(request)
+        request.ack()
+
+
 main(ECalDevice)
