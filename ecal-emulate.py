@@ -14,6 +14,9 @@ class ECalDevice(USBDevice):
     serial_number_string     : str  = "S/N 12346"
     device_speed             : DeviceSpeed = DeviceSpeed.FULL
 
+    address = 0
+    data = open('EEPROM/HP85062-60006.bin', 'rb').read()
+
     class ECalConfiguration(USBConfiguration):
 
         class ECalInterface(USBInterface):
@@ -25,7 +28,10 @@ class ECalDevice(USBDevice):
                 max_packet_size      : int = 64
                 
                 def handle_data_requested(self):
-                    self.send(b"Hello!")
+                    # Respond with 32 bytes of EEPROM data
+                    dev = self.get_device()
+                    addr = dev.address
+                    self.send(dev.data[addr:addr+32])
 
             class ECalOutEndpoint(USBEndpoint):
                 number               : int                    = 1
