@@ -44,7 +44,7 @@ class ECalDevice(USBDevice):
     @to_device
     def handle_control_request_2(self, request):
         print(request)
-        self.address = request.value
+        self.address = 0x400 - request.value
         request.ack()
 
 
